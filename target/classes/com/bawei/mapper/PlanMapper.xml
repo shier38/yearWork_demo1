@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.bawei.mapper.PlanMapper">
+  	
+  	<!-- <insert id="addDepartmentList">
+  		insert into  zhunneng_department values
+  		<foreach collection="list" separator="," item="d">
+  			(#{d.id},#{d.name})
+  		</foreach>
+  	</insert> -->
+  	
+  	<insert id="addPlan">
+  		insert into zhunneng_2019plan  values
+  		<foreach collection="list" separator="," item="p">
+  			(#{p.id},#{p.name},#{p.amount},#{p.manager},#{p.content},#{p.dept_id})
+  		</foreach>
+  	</insert>
+  	
+  	<select id="list" resultType="com.bawei.entity.Plan">
+  		select p.*,d.name dname from zhunneng_2019plan p
+		LEFT JOIN zhunneng_department d on p.dept_id=d.id
+
+  		<where>
+  			<if test="name!=null and name!=''">
+  				 p.name like concat('%',#{name},'%')
+  			</if>
+  		</where>
+  		GROUP BY p.id
+  	</select>
+  	
+  	<delete id="delAll">
+  		delete from zhunneng_2019plan where id in 
+  		 <foreach collection="array"  item="id" open="(" separator="," close=")">
+           #{id}
+      </foreach>
+  	</delete>
+  	
+  </mapper>
